@@ -7,12 +7,12 @@ class TestGitProject: public QObject
     Q_OBJECT
 
 private slots:
-    void testConstructor() {
+    void test_constructor() {
         GitProject git(NULL);
         QCOMPARE(git.currentPath(), QString("."));
     }
 
-    void testExecute() {
+    void test_execute() {
         GitProject git(NULL);
 
         QStringList result = git.execute("version");
