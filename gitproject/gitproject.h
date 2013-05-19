@@ -9,11 +9,12 @@ class GitProject : public QObject
     Q_OBJECT
 public:
     explicit GitProject(QObject *parent = 0);
-    
+    ~GitProject();
+
 signals:
     
 public slots:
-    void execute(QString input);
+    void execute(QString input, bool wait = false);
     void onReadyToRead();
 
 private:
@@ -24,6 +25,7 @@ private:
 
 public:
     QString currentPath();
+    QStringList output();
 };
 
 #endif // GITPROJECT_H
