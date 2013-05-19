@@ -11,7 +11,7 @@ GitProject::~GitProject()
 {
 }
 
-void GitProject::execute(QString input, bool wait)
+QStringList GitProject::execute(QString input, bool sync)
 {
     if(_process)
         delete _process;
@@ -22,13 +22,22 @@ void GitProject::execute(QString input, bool wait)
 
     _process->setWorkingDirectory(_currentPath);
     _process->setReadChannel(QProcess::StandardOutput);
-    connect(_process, SIGNAL(readyReadStandardOutput()),
-            this, SLOT(onReadyToRead()));
 
-    _process->start("git", arguments);
+    if (sync) {
+        _process->start("git", arguments);
 
-    if (wait)
         _process->waitForFinished();
+        onReadyToRead();
+
+        return _output;
+    } else {
+        connect(_process, &QProcess::readyReadStandardOutput,
+                this, &GitProject::onReadyToRead);
+
+        _process->start("git", arguments);
+
+        return QStringList();
+    }
 }
 
 void GitProject::onReadyToRead()

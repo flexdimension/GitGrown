@@ -14,12 +14,13 @@ private slots:
 
     void testExecute() {
         GitProject git(NULL);
-        git.execute("version", true);
 
-        QCOMPARE(git.output().length(), 1);
-        QStringList result = git.output()[0].split(" ");
-        QCOMPARE(result[0], QString("git"));
-        QCOMPARE(result[1], QString("version"));
+        QStringList result = git.execute("version");
+
+        QCOMPARE(result.length(), 1);
+        QStringList firstLine = result[0].split(" ");
+        QCOMPARE(firstLine[0], QString("git"));
+        QCOMPARE(firstLine[1], QString("version"));
     }
 };
 

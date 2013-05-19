@@ -13,4 +13,8 @@ Rectangle {
             Qt.quit();
         }
     }
+
+    Component.onCompleted: {
+        console.log("initialized");
+    }
 }

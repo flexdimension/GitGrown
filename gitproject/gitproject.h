@@ -14,7 +14,7 @@ public:
 signals:
     
 public slots:
-    void execute(QString input, bool wait = false);
+    QStringList execute(QString input, bool sync = true);
     void onReadyToRead();
 
 private:
