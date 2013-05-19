@@ -14,8 +14,7 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    test/testgitproject.cpp \
-    tests/testgitproject.cpp
+    gitproject/gitproject.cpp
 
 # Installation path
 # target.path =
@@ -24,4 +23,5 @@ SOURCES += main.cpp \
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
-HEADERS +=
+HEADERS += \
+    gitproject/gitproject.h
