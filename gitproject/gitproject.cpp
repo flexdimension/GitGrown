@@ -11,12 +11,12 @@ GitProject::~GitProject()
 {
 }
 
-QStringList GitProject::execute(QString input, bool sync)
+QString GitProject::execute(QString cmd, QString args, bool sync)
 {
     if(_process)
         delete _process;
 
-    QStringList arguments = input.split(" ", QString::SkipEmptyParts);
+    QStringList arguments = args.split(" ", QString::SkipEmptyParts);
 
     _process = new QProcess(this);
 
@@ -34,15 +34,15 @@ QStringList GitProject::execute(QString input, bool sync)
         connect(_process, &QProcess::readyReadStandardOutput,
                 this, &GitProject::onReadyToRead);
 
-        _process->start("git", arguments);
+        _process->start(cmd, arguments);
 
-        return QStringList();
+        return QString();
     }
 }
 
 void GitProject::onReadyToRead()
 {
-    _output = QString(_process->readAllStandardOutput()).split("\n", QString::SkipEmptyParts);
+    _output = _process->readAllStandardOutput();
 }
 
 QString GitProject::currentPath()
@@ -50,7 +50,7 @@ QString GitProject::currentPath()
     return _currentPath;
 }
 
-QStringList GitProject::output()
+QString GitProject::output()
 {
     return _output;
 }

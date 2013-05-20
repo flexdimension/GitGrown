@@ -14,18 +14,18 @@ public:
 signals:
     
 public slots:
-    QStringList execute(QString input, bool sync = true);
+    QString execute(QString cmd, QString args, bool sync = true);
     void onReadyToRead();
 
 private:
     QString _currentPath;
-    QStringList _output;
+    QString _output;
 
     QProcess* _process;
 
 public:
     QString currentPath();
-    QStringList output();
+    QString output();
 };
 
 #endif // GITPROJECT_H
