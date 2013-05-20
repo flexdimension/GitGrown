@@ -8,4 +8,4 @@ INCLUDEPATH += .
 QT += testlib
 # Input
 HEADERS += ../gitproject/gitproject.h
-SOURCES += testgitproject.cpp ../gitproject/gitproject.cpp
+SOURCES += tst_gitproject.cpp ../gitproject/gitproject.cpp
