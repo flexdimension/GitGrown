@@ -8,12 +8,18 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    QString path(".");
+
+    if (argc == 2) {
+        path = argv[1];
+    }
+
     QtQuick2ApplicationViewer viewer;
 
     GitProject git;
 
     QQmlContext *context = viewer.rootContext();
-    context->setContextProperty("git", &git);
+    context->setContextProperty("gGit", &git);
 
     viewer.setMainQmlFile(QStringLiteral("qml/GitGrown/main.qml"));
     viewer.showExpanded();

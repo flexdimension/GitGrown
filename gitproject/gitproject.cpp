@@ -1,5 +1,7 @@
 #include "gitproject.h"
 
+#include <QDir>
+
 GitProject::GitProject(QObject *parent, QString path ) :
     QObject(parent)
     , _currentPath(path)
@@ -55,7 +57,24 @@ QString GitProject::output()
     return _output;
 }
 
-void GitProject::setCurrentPath(QString path)
+bool GitProject::setCurrentPath(QString path)
 {
+    QDir dir;
+    if (!dir.exists(path))
+        return false;
+
     _currentPath = path;
+    return isGitProject();
+}
+
+bool GitProject::isGitProject()
+{
+    QDir dir;
+
+    dir.setPath(_currentPath);
+
+    if (dir.exists(".git"))
+        return true;
+    else
+        return false;
 }

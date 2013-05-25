@@ -14,11 +14,19 @@ Rectangle {
         }
     }
 
+    Git {
+        id: git
+    }
+
     Component.onCompleted: {
         console.log("initialized");
 
-        var result = git.execute("git", "status");
+        var result = git.execute("git", "version");
 
-        console.log(result);
+        console.log("result:" + result);
+
+        var result = git.cmd("version");
+
+        console.log("result:" + result);
     }
 }

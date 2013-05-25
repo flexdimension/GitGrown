@@ -15,14 +15,19 @@ private slots:
 
     void mkdir();
     void cleanupTestCase();
+
+    void git_init();
+    void git_status();
 };
 
 void tst_GitProject::initTestCase()
 {
     QDir dir;
 
+    //clear tst_project if exists
     if (dir.exists("tst_project")) {
-        dir.rmpath("tst_project");
+        GitProject git;
+        QString result = git.execute("rm", "-rf tst_project");
     }
 
     dir.mkdir("tst_project");
@@ -31,6 +36,7 @@ void tst_GitProject::initTestCase()
 
     qDebug() << "created tst_project folder";
     qDebug() << QDir::currentPath();
+
 }
 
 void tst_GitProject::cleanupTestCase()
@@ -39,13 +45,13 @@ void tst_GitProject::cleanupTestCase()
 
 void tst_GitProject::construction()
 {
-    GitProject git(NULL);
+    GitProject git;
     QCOMPARE(git.currentPath(), QString("."));
 }
 
 void tst_GitProject::execute()
 {
-    GitProject git(NULL);
+    GitProject git;
 
     QString result = git.execute("git", "version");
 
@@ -63,10 +69,36 @@ void tst_GitProject::mkdir()
 void tst_GitProject::setCurrentPath()
 {
     GitProject git;
-    git.setCurrentPath("..");
-    QString result = git.execute("pwd");
+    bool isGitProject = git.setCurrentPath(".");
+    qDebug() << "isGitProject:" << isGitProject;
+    QVERIFY(isGitProject == false);
+}
 
+void tst_GitProject::git_init()
+{
+    GitProject git;
+    QString result = git.execute("pwd");
     qDebug() << "current path:" << result;
+
+    QVERIFY(git.setCurrentPath(".") == false);
+
+    git.execute("git", "init");
+
+    QVERIFY(git.isGitProject());
+}
+
+void tst_GitProject::git_status()
+{
+    GitProject git;
+    git.execute("touch", "testFile.txt");
+    QString result = git.execute("git", "status -s").split("\n")[0];
+    qDebug() << result;
+
+    QString status = result.left(3);
+    QString fileName = result.mid(3);
+
+    QCOMPARE(status, QString("?? "));
+    QCOMPARE(fileName, QString("testFile.txt"));
 }
 
 QTEST_MAIN(tst_GitProject)

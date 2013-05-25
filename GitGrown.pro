@@ -25,3 +25,5 @@ qtcAddDeployment()
 
 HEADERS += \
     gitproject/gitproject.h
+
+OTHER_FILES +=

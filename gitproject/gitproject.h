@@ -17,7 +17,8 @@ public slots:
     void onReadyToRead();
 
     QString execute(QString cmd, QString args = "", bool sync = true);
-    void setCurrentPath(QString path);
+    bool setCurrentPath(QString path);
+    bool isGitProject();
 
 private:
     QString _currentPath;
