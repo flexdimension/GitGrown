@@ -25,7 +25,7 @@ Rectangle {
 
         console.log("result:" + result);
 
-        var result = git.cmd("version");
+        result = git.cmd("version");
 
         console.log("result:" + result);
     }
