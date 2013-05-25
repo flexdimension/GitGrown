@@ -8,14 +8,16 @@ class GitProject : public QObject
 {
     Q_OBJECT
 public:
-    explicit GitProject(QObject *parent = 0);
+    explicit GitProject(QObject *parent = 0, QString path = ".");
     ~GitProject();
 
 signals:
     
 public slots:
-    QString execute(QString cmd, QString args, bool sync = true);
     void onReadyToRead();
+
+    QString execute(QString cmd, QString args = "", bool sync = true);
+    void setCurrentPath(QString path);
 
 private:
     QString _currentPath;

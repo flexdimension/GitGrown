@@ -17,7 +17,7 @@ Rectangle {
     Component.onCompleted: {
         console.log("initialized");
 
-        var result = git.execute("git", "version");
+        var result = git.execute("git", "status");
 
         console.log(result);
     }

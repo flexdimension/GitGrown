@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
 
     QtQuick2ApplicationViewer viewer;
 
-    GitProject *git = new GitProject(&viewer);
+    GitProject git;
 
     QQmlContext *context = viewer.rootContext();
-    context->setContextProperty("git", git);
+    context->setContextProperty("git", &git);
 
     viewer.setMainQmlFile(QStringLiteral("qml/GitGrown/main.qml"));
     viewer.showExpanded();

@@ -1,8 +1,8 @@
 #include "gitproject.h"
 
-GitProject::GitProject(QObject *parent) :
+GitProject::GitProject(QObject *parent, QString path ) :
     QObject(parent)
-    , _currentPath(".")
+    , _currentPath(path)
     , _process(NULL)
 {
 }
@@ -24,7 +24,7 @@ QString GitProject::execute(QString cmd, QString args, bool sync)
     _process->setReadChannel(QProcess::StandardOutput);
 
     if (sync) {
-        _process->start("git", arguments);
+        _process->start(cmd, arguments);
 
         _process->waitForFinished();
         onReadyToRead();
@@ -53,4 +53,9 @@ QString GitProject::currentPath()
 QString GitProject::output()
 {
     return _output;
+}
+
+void GitProject::setCurrentPath(QString path)
+{
+    _currentPath = path;
 }
