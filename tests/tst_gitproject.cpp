@@ -41,7 +41,7 @@ void tst_GitProject::initTestCase()
     //clear tst_project if exists
     if (dir.exists("tst_project")) {
         GitProject git;
-        QString result = git.execute("rm", "-rf tst_project");
+        QString result = git.execute("rm", QStringList() << "-rf" << "tst_project");
     }
 
     dir.mkdir("tst_project");
@@ -67,7 +67,7 @@ void tst_GitProject::execute()
 {
     GitProject git;
 
-    QString result = git.execute("git", "version");
+    QString result = git.execute("git", QStringList() << "version");
 
     QStringList firstLine = result.split(" ");
     QCOMPARE(firstLine[0], QString("git"));
@@ -96,7 +96,7 @@ void tst_GitProject::git_init()
 
     QVERIFY(git.setCurrentPath(".") == false);
 
-    git.execute("git", "init");
+    git.execute("git", QStringList("init"));
 
     QVERIFY(git.isGitProject());
 }
@@ -105,8 +105,8 @@ void tst_GitProject::git_status()
 {
     QString fileName("testFile.txt");
     GitProject git;
-    git.execute("touch", fileName);
-    QString result = git.execute("git", "status -s").split("\n")[0];
+    git.execute("touch", QStringList() << fileName);
+    QString result = git.execute("git", QStringList() << "status" << "-s").split("\n")[0];
     qDebug() << result;
 
     QString status = result.left(2);
@@ -115,16 +115,16 @@ void tst_GitProject::git_status()
     QCOMPARE(status, QString("??"));
     QCOMPARE(fileName01, fileName);
 
-    git.execute("git", QString("add " + fileName));
-    status = git.execute("git", "status -s").split("\n")[0].left(2);
+    git.execute("git", QStringList() << "add" << fileName);
+    status = git.execute("git", QStringList() << "status" << "-s").split("\n")[0].left(2);
     QCOMPARE(status, QString("A "));
 
     appendToFile(fileName, "test01");
-    status = git.execute("git", "status -s").split("\n")[0].left(2);
+    status = git.execute("git", QStringList() << "status" << "-s").split("\n")[0].left(2);
     QCOMPARE(status, QString("AM"));
 
-    git.execute("git", QString("rm --cached -f ") + fileName);
-    status = git.execute("git", "status -s").split("\n")[0].left(2);
+    git.execute("git", QStringList() << "rm" << "--cached" << "-f" << fileName);
+    status = git.execute("git", QStringList() << "status" << "-s").split("\n")[0].left(2);
     QCOMPARE(status, QString("??"));
 }
 

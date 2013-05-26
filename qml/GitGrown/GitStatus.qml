@@ -6,7 +6,7 @@ ListModel {
     function update() {
         clear();
 
-        var output = git.cmd("status", "-s").split("\n");
+        var output = git.cmd("status", ["-s"]).split("\n");
 
         for (var i = 0; i < output.length; i++) {
             var itemStatus = output[i].substring(0, 2);
@@ -20,13 +20,13 @@ ListModel {
 
     function stageFile(idx) {
         var item = get(idx);
-        git.cmd("add", item.name);
+        git.cmd("add", [item.name]);
         update();
     }
 
     function unstageFile(idx) {
         var item = get(idx);
-        git.cmd("rm", "--cached " + item.name);
+        git.cmd("rm", ["--cached", item.name]);
         update();
     }
 

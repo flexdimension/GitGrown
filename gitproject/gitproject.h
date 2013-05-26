@@ -16,7 +16,7 @@ signals:
 public slots:
     void onReadyToRead();
 
-    QString execute(QString cmd, QString args = "", bool sync = true);
+    QString execute(QString cmd, QStringList args = QStringList(), bool sync = true);
     bool setCurrentPath(QString path);
     bool isGitProject();
 

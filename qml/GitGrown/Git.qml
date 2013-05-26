@@ -16,6 +16,7 @@ QtObject {
             sync = true;
         if (!args)
             args = "";
-        return gGit.execute("git", gitCmd + " " + args, sync);
+
+        return gGit.execute("git", [gitCmd].concat(args), sync);
     }
 }

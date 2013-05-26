@@ -71,7 +71,7 @@ Rectangle {
                        MouseArea {
                            anchors.fill: parent
                            onClicked: {
-                               git.cmd("commit", "")
+                               //git.cmd("commit")
                            }
                        }
                     }

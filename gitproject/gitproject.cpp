@@ -13,12 +13,10 @@ GitProject::~GitProject()
 {
 }
 
-QString GitProject::execute(QString cmd, QString args, bool sync)
+QString GitProject::execute(QString cmd, QStringList args, bool sync)
 {
     if(_process)
         delete _process;
-
-    QStringList arguments = args.split(" ", QString::SkipEmptyParts);
 
     _process = new QProcess(this);
 
@@ -26,7 +24,7 @@ QString GitProject::execute(QString cmd, QString args, bool sync)
     _process->setReadChannel(QProcess::StandardOutput);
 
     if (sync) {
-        _process->start(cmd, arguments);
+        _process->start(cmd, args);
 
         _process->waitForFinished();
         onReadyToRead();
@@ -36,7 +34,7 @@ QString GitProject::execute(QString cmd, QString args, bool sync)
         connect(_process, &QProcess::readyReadStandardOutput,
                 this, &GitProject::onReadyToRead);
 
-        _process->start(cmd, arguments);
+        _process->start(cmd, args);
 
         return QString();
     }
