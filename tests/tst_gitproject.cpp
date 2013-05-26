@@ -1,11 +1,15 @@
 #include <QtTest/QtTest>
 #include <QDir>
+#include <QFile>
 #include <QDebug>
 #include "../gitproject/gitproject.h"
 
 class tst_GitProject: public QObject
 {
     Q_OBJECT
+
+private:
+    void appendToFile(QString fileName, QString text);
 
 private slots:
     void initTestCase();
@@ -19,6 +23,16 @@ private slots:
     void git_init();
     void git_status();
 };
+
+void tst_GitProject::appendToFile(QString fileName, QString text)
+{
+    QFile file(fileName);
+    if (!file.open(QIODevice::Append | QIODevice::Text))
+        return;
+
+    QTextStream out(&file);
+    out << text << "\n";
+}
 
 void tst_GitProject::initTestCase()
 {
@@ -89,16 +103,29 @@ void tst_GitProject::git_init()
 
 void tst_GitProject::git_status()
 {
+    QString fileName("testFile.txt");
     GitProject git;
-    git.execute("touch", "testFile.txt");
+    git.execute("touch", fileName);
     QString result = git.execute("git", "status -s").split("\n")[0];
     qDebug() << result;
 
-    QString status = result.left(3);
-    QString fileName = result.mid(3);
+    QString status = result.left(2);
+    QString fileName01 = result.mid(3);
 
-    QCOMPARE(status, QString("?? "));
-    QCOMPARE(fileName, QString("testFile.txt"));
+    QCOMPARE(status, QString("??"));
+    QCOMPARE(fileName01, fileName);
+
+    git.execute("git", QString("add " + fileName));
+    status = git.execute("git", "status -s").split("\n")[0].left(2);
+    QCOMPARE(status, QString("A "));
+
+    appendToFile(fileName, "test01");
+    status = git.execute("git", "status -s").split("\n")[0].left(2);
+    QCOMPARE(status, QString("AM"));
+
+    git.execute("git", QString("rm --cached -f ") + fileName);
+    status = git.execute("git", "status -s").split("\n")[0].left(2);
+    QCOMPARE(status, QString("??"));
 }
 
 QTEST_MAIN(tst_GitProject)

@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     QtQuick2ApplicationViewer viewer;
 
     GitProject git;
+    git.setCurrentPath(path);
 
     QQmlContext *context = viewer.rootContext();
     context->setContextProperty("gGit", &git);

@@ -45,6 +45,7 @@ QString GitProject::execute(QString cmd, QString args, bool sync)
 void GitProject::onReadyToRead()
 {
     _output = _process->readAllStandardOutput();
+    _output.resize(_output.length() - 1);
 }
 
 QString GitProject::currentPath()
