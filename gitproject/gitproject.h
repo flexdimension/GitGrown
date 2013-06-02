@@ -12,6 +12,7 @@ public:
     ~GitProject();
 
 signals:
+    void resulted(QString);
     
 public slots:
     void onReadyToRead();

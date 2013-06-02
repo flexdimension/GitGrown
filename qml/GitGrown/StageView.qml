@@ -1,11 +1,9 @@
 import QtQuick 2.0
 
 Rectangle {
-    property alias statusModel: stageListView.statusModel
+    id: mainObject
 
-    Git {
-        id: git
-    }
+    property variant statusModel: null
 
     Rectangle {
         id: commitWidget
@@ -23,6 +21,7 @@ Rectangle {
             clip: true
 
             TextEdit {
+                id: commitText
                 anchors.fill: parent
                 anchors.margins: 5
             }
@@ -71,7 +70,12 @@ Rectangle {
                        MouseArea {
                            anchors.fill: parent
                            onClicked: {
-                               //git.cmd("commit")
+                               if (commitText.text.length == 0) {
+                                   console.log("cannot commit")
+                                   return;
+                               }
+                               var rslt = statusModel.commit( commitText );
+                               commitText.text = "";
                            }
                        }
                     }
@@ -95,7 +99,7 @@ Rectangle {
 
             ListView {
                 id:stageListView
-                property variant statusModel: null
+                property variant statusModel: mainObject.statusModel
                 anchors.margins: 2
                 anchors.fill: parent
 

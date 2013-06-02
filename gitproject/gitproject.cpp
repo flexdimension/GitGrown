@@ -44,6 +44,8 @@ void GitProject::onReadyToRead()
 {
     _output = _process->readAllStandardOutput();
     _output.resize(_output.length() - 1);
+
+    emit resulted(_output);
 }
 
 QString GitProject::currentPath()
