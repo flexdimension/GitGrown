@@ -16,7 +16,9 @@ Rectangle {
         }
     }
 
-    property variant model: GitStatus {id:status}
+    property variant model: GitStatus {id: status}
+
+    property variant commitList: GitCommitList {id: commits}
 
 
     StageView {

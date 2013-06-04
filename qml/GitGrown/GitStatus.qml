@@ -62,7 +62,8 @@ ListModel {
 
     function commit(comment) {
 
-        var rslt = git.cmd("commit", ["-m", "\"" + comment + "\"" ]);
+        console.log("comment:" + comment);
+        var rslt = git.cmd("commit", ["-m" + comment ]);
         update();
         return rslt;
     }

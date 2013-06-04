@@ -26,4 +26,5 @@ qtcAddDeployment()
 HEADERS += \
     gitproject/gitproject.h
 
-OTHER_FILES +=
+OTHER_FILES += \
+    qml/GitGrown/GitCommitList.qml

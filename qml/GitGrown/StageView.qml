@@ -74,7 +74,7 @@ Rectangle {
                                    console.log("cannot commit")
                                    return;
                                }
-                               var rslt = statusModel.commit( commitText );
+                               var rslt = statusModel.commit( commitText.text );
                                commitText.text = "";
                            }
                        }
