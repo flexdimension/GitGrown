@@ -115,35 +115,8 @@ Rectangle {
                     border.width: 1
                     border.color: "#DDDDDD"
 
-                    Rectangle { id: workingItem
-                        x:0
-                        width: parent.width / 2;
-                        height: parent.height;
-                        color: "#EEDDCC"
-                        radius: 5;
-                        border.width: 2;
-                        border.color: "#E0C099"
-
-                        visible: model.status.charAt(1) != " "
-
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter;
-                            anchors.left: parent.left;
-                            anchors.right: parent.right;
-                            anchors.margins: 5;
-                            text: model.name;
-                            clip: true;
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: {
-                                stageListView.statusModel.stageFile(model.index);
-                            }
-                        }
-                    }
                     Rectangle { id: stagedItem
-                        x: parent.width / 2;
+                        x: 0;
                         width: parent.width / 2;
                         height: parent.height;
                         color: "#DDEEDD"
@@ -168,6 +141,34 @@ Rectangle {
                                 if (model.status.charAt(1) != " ")
                                     console.log("cannot unstage: " + model.name);
                                 stageListView.statusModel.unstageFile(model.index);
+                            }
+                        }
+                    }
+
+                    Rectangle { id: workingItem
+                        x: parent.width / 2
+                        width: parent.width / 2;
+                        height: parent.height;
+                        color: "#EEDDCC"
+                        radius: 5;
+                        border.width: 2;
+                        border.color: "#E0C099"
+
+                        visible: model.status.charAt(1) != " "
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter;
+                            anchors.left: parent.left;
+                            anchors.right: parent.right;
+                            anchors.margins: 5;
+                            text: model.name;
+                            clip: true;
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: {
+                                stageListView.statusModel.stageFile(model.index);
                             }
                         }
                     }

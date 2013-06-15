@@ -7,13 +7,32 @@ ListModel {
 
     }
 
+    function concat(a, b) {
+        for (var i = 0; i < b.length; i++) {
+            a.push(b[i]);
+        }
+
+        return a;
+    }
+
+
     function update() {
         clear();
+        var commitList = buildTable();
+        var arrangedList = rearrange(commitList);
+
+        console.log("arrangedList length " + arrangedList.length);
+    }
+
+    function buildTable() {
+        var commitList = {};
 
         var Item = function(item) {
             this.hash = item[0];
             this.name = item[1];
-
+            this.parents = item[2];
+            this.indent = -1;
+            this.index = -1;
         }
 
         var output = git.cmd("log", ["--pretty=format:%h:%p%n%s", "--name-only"]);
@@ -54,8 +73,58 @@ ListModel {
                 subject = output[i];
             }
 
-            append(new Item([hash, subject]));
+            //append(new Item([hash, subject]));
+            commitList[hash] = new Item([hash, subject, parents]);
+
+            if (commitList.HEAD == undefined) {
+                commitList.HEAD = commitList[hash];
+                console.log("headCommit :"  + commitList.HEAD);
+            }
         }
+
+        return commitList;
+    }
+
+    function rearrange(commitList) {
+        if (commitList.HEAD == undefined)
+            return;
+
+        var head = commitList.HEAD;
+
+        head.indent = 0;
+        var commitTree = tree(head, commitList);
+
+        for (var i = 0; i < commitTree.length; i++) {
+            append(commitTree[i]);
+        }
+
+
+
+
+
+
+        return commitTree;
+    }
+
+    function tree(child, commitList) {
+        var t = [];
+        console.log("child length " + child.parents.length);
+
+        for (var i = 0; i < child.parents.length; i++) {
+            var parent = commitList[child.parents[i]];
+
+            if (parent.indent != -1)
+                continue;
+
+            parent.indent = child.indent + i;
+            var pTree = tree(parent, commitList);
+            t = concat(pTree, t);
+            console.log("concat : " + t.length);
+        }
+
+        t.unshift(child);
+
+        return t;
     }
 
     Component.onCompleted: {

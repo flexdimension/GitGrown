@@ -41,7 +41,7 @@ Item {
     Rectangle {
         id: rectangle3
         x: 100
-        y: 29
+        y: 29;
         anchors.horizontalCenter: parent.horizontalCenter
         width: 50
         height: 50
@@ -69,18 +69,22 @@ Item {
             antialiasing: true
         }
 
-        Rectangle {
-            id: rectangle1
+        Item {
+            id: item1
             x: 0
             y: 0
             width: 40
             height: 21
-            color: "#ffffff"
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.right: parent.right
             anchors.rightMargin: 0
-            opacity: 0.4
+
+            Rectangle {
+                anchors.fill: parent
+                color: "#ffffff"
+                opacity: 0.4
+            }
 
             Text {
                 id: textHash

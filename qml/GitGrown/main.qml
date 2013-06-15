@@ -12,14 +12,14 @@ Rectangle {
     StageView {
         statusModel: main.model
 
-        width: 500
-        height: 500
+        width: 400
+        height: 400
     }
 
     Rectangle {
-        y: 500;
+        y: 400;
         width: 800
-        height: 300
+        height: 400
         clip: true
 
         border.width: 1
@@ -33,6 +33,7 @@ Rectangle {
             model: main.commitList
             delegate: CommitItem {
                 text: model.hash
+                y: model.indent * 50
             }
 
             header: Item {
