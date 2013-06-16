@@ -25,16 +25,66 @@ Rectangle {
         border.width: 1
 
         ListView {
+            id: listView
             width: parent.width
             height: parent.height
             orientation: ListView.Horizontal
             layoutDirection: Qt.RightToLeft
 
             model: main.commitList
-            delegate: CommitItem {
-                text: model.hash
-                y: model.indent * 50
-            }
+            delegate:
+                Rectangle {
+                    width: commitItem.width
+                    height: listView.height
+
+                    border.color: "gray"
+
+                    Rectangle {
+                        id:background
+                        Column {
+                            y: 15
+                            Repeater {
+                                model: graphString.split(',').length;
+                                Rectangle {
+                                    width: 80
+                                    height: 50
+                                    clip: true
+
+                                    Image {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        source: graphString.split(',')[index] == '\\' ? "link_merge.svg"
+                                                                                      : ( graphString.split(',')[index] == '/' ? "link_branch.svg" : "link_through.svg")
+                                    }
+                                }
+
+//                                Component.onCompleted: {
+//                                    console.log(graphString);
+//                                    var grp = graphString.split(',');
+//                                    for (var i = 0; i < grp.length; i++) {
+//                                        if (grp[i] == '|')
+//                                            Image.createObject()
+//                                    }
+//                                }
+                            }
+                        }
+                    }
+
+                    CommitItem {
+                        id: commitItem
+                        text: model.hash
+                        y: model.indent * 50
+
+                        Image {
+                            z: -1
+                            anchors.fill: parent
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "link_through.svg"
+                            visible: index != 0
+                        }
+                    }
+
+
+                }
 
             header: Item {
                 width: index.width * 1.3

@@ -1,9 +1,11 @@
 import QtQuick 2.0
 
-Item {
+Rectangle {
     id: main
     width: 80
     height: 80
+    border.color: "gray"
+    color: "transparent"
     antialiasing: true
 
     property alias text: textHash.text
@@ -40,9 +42,12 @@ Item {
 
     Rectangle {
         id: rectangle3
-        x: 100
-        y: 29;
+        //x: 100
+        y: 0;
         anchors.horizontalCenter: parent.horizontalCenter
+        //anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+
         width: 50
         height: 50
         color: "transparent"

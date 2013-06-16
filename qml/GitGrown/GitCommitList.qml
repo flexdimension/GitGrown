@@ -21,7 +21,7 @@ ListModel {
         var commitList = buildTable();
         var arrangedList = rearrange(commitList);
 
-        console.log("arrangedList length " + arrangedList.length);
+        //console.log("arrangedList length " + arrangedList.length);
     }
 
     function buildTable() {
@@ -32,8 +32,8 @@ ListModel {
             this.name = item[1];
             this.parents = item[2];
             this.indent = -1;
-            this.index = -1;
             this.graph = [];
+            this.graphString = "";
         }
 
         var output = git.cmd("log", ["--pretty=format:%h:%p%n%s", "--name-only"]);
@@ -136,8 +136,8 @@ ListModel {
 
 
 
-        console.log('prv ' + prev.hash + ':' + prev.graph);
-        console.log('cur ' + cur.hash + ':' + graph);
+        //console.log('prv ' + prev.hash + ':' + prev.graph);
+        //console.log('cur ' + cur.hash + ':' + graph);
 
         return graph;
     }
@@ -160,19 +160,21 @@ ListModel {
             var prev = commitTree[i - 1];
 
             cur.graph = getGraph(cur, prev);
+        }
 
+        for (var i = 0; i < commitTree.length; i++) {
+            commitTree[i].graphString = commitTree[i].graph.join();
             append(commitTree[i]);
         }
 
-        for (var i = 0; i < commitTree.length; i++)
-            console.log(commitTree[i].hash + ':' + commitTree[i].graph);
+            //console.log(commitTree[i].hash + ':' + commitTree[i].graph);
 
         return commitTree;
     }
 
     function tree(child, commitList) {
         var t = [];
-        console.log("child length " + child.parents.length);
+        //console.log("child length " + child.parents.length);
 
         for (var i = 0; i < child.parents.length; i++) {
             var parent = commitList[child.parents[i]];
@@ -183,7 +185,7 @@ ListModel {
             parent.indent = child.indent + i;
             var pTree = tree(parent, commitList);
             t = concat(pTree, t);
-            console.log("concat : " + t.length);
+            //console.log("concat : " + t.length);
         }
 
         t.unshift(child);
