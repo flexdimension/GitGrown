@@ -89,6 +89,7 @@ ListModel {
     function getGraph(cur, prev) {
         var graph = [];
 
+        // initialize prev if not exists.
         if (prev == undefined) {
             //graph[cur.indent] = ['*'];
             //return graph;
@@ -96,48 +97,63 @@ ListModel {
             prev.graph = [];
         }
 
-        graph = prev.graph.slice();
+        // clone prev.graph by calling slice function without parameter.
+        cur.graph = prev.graph.slice();
 
+        // print parent
+        if (cur.parents.length == 0)
+            cur.graph[cur.indent] = ' ';
+        else
+            cur.graph[cur.indent] = cur.parents[0];
+
+        // if meet origin of branch,
         for (var i = 0; i < prev.graph.length; i++) {
-
-            if (prev.graph[i] == '/')
-                graph[i] = ' ';
-
-            if (prev.graph[i] == '\\')
-              graph[i] = prev.parents[1];
-
-            if (prev.graph[i] == '*')
-                graph[i] = prev.parents[0];
-
-            if (prev.graph[i] == undefined)
-                prev.graph[i] = ' ';
-
-            if (prev.graph[i].length > 1)
-                prev.graph[i] = '|';
-
-            if (graph[i] == cur.hash && i != cur.indent) {
-                graph[i] = '/';
-            }
+            if (prev.graph[i] == prev.hash)
+                cur.graph[i] = ' ';
         }
 
-        graph[cur.indent] = '*';
-
-        for (var i = graph.length - 1; i >= 0; i--) {
-            if (graph[i] == ' ') {
-                graph.pop();
-            }
+        // delete tail's space
+        for (var i = cur.graph.length - 1; i >= 0; i--) {
+            if (cur.graph[i] == ' ')
+                cur.graph.pop();
             else
                 break;
         }
 
-        if (cur.parents.length == 2) {
-            graph[graph.length] = '\\';
+        cur.graphString[cur.indent] = '';
+
+        for (var i = 0; i < cur.graph.length; i++) {
+            var output = '';
+
+            if (i == cur.indent)
+                output = '*';
+            else if (cur.graph[i] == ' ')
+                output = ' ';
+            else {
+                if (cur.graph[i] == cur.parents[1])
+                    if (i < cur.indent)
+                        output = 'r';
+                    else
+                        output = 'y';
+                else if (cur.graph[i] == cur.hash && i != cur.indent)
+                    output = '/';
+                else
+                    output = '|';
+            }
+
+            cur.graphString += output;
         }
 
+        if (cur.parents.length == 2) {
+            var idxParent = cur.graph.indexOf(cur.parents[1]);
+            if (idxParent == -1 ) {
+                cur.graph.push(cur.parents[1]);
+                cur.graphString += '\\';
+            }
+        }
 
-
-        //console.log('prv ' + prev.hash + ':' + prev.graph);
-        //console.log('cur ' + cur.hash + ':' + graph);
+        console.log('cur ' + cur.hash + ':' + cur.graphString);
+        console.log('cur ' + cur.hash + ':' + cur.graph.join());
 
         return graph;
     }
@@ -149,9 +165,7 @@ ListModel {
         var head = commitList.HEAD;
 
         head.indent = 0;
-        //head.graph[head.indent] = ['*'];
-        head.graph = getGraph(head);
-        append(head);
+        getGraph(head);
 
         var commitTree = tree(head, commitList);
 
@@ -159,11 +173,10 @@ ListModel {
             var cur = commitTree[i];
             var prev = commitTree[i - 1];
 
-            cur.graph = getGraph(cur, prev);
+            getGraph(cur, prev);
         }
 
         for (var i = 0; i < commitTree.length; i++) {
-            commitTree[i].graphString = commitTree[i].graph.join();
             append(commitTree[i]);
         }
 

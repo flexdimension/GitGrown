@@ -44,17 +44,42 @@ Rectangle {
                         Column {
                             y: 15
                             Repeater {
-                                model: graphString.split(',').length;
+                                model: graphString.length;
                                 Rectangle {
                                     width: 80
                                     height: 50
                                     clip: true
 
                                     Image {
+                                        width: parent.width
                                         anchors.verticalCenter: parent.verticalCenter
-                                        source: graphString.split(',')[index] == '\\' ? "link_merge.svg"
-                                                                                      : ( graphString.split(',')[index] == '/' ? "link_branch.svg" : "link_through.svg")
+                                        Component.onCompleted: {
+                                            var fileName = getImage(graphString.charAt(index));
+                                            if (!fileName)
+                                                visible = false;
+                                            else {
+                                                visible = true;
+                                                source = fileName;
+                                            }
+                                        }
+                                        function getImage(ch) {
+                                            if (ch == '\\')
+                                                return "link_merge.svg";
+                                            if (ch == '/')
+                                                return "link_branch.svg";
+                                            if (ch == '|')
+                                                return "link_through.svg";
+                                            if (ch == 'y')
+                                                return "link_through_merge_under.svg";
+                                            if (ch == 'r')
+                                                return "link_through_merge_over.svg";
+
+                                            console.log('link line:' + ch);
+                                            return null;
+                                        }
+
                                     }
+
                                 }
 
 //                                Component.onCompleted: {
