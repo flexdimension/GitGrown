@@ -37,10 +37,29 @@ Rectangle {
                     width: commitItem.width
                     height: listView.height
 
-                    border.color: "gray"
+                    border.color: "#EEEEEE"
 
                     Rectangle {
                         id:background
+                        Image {
+                            x: 0
+                            y: commitItem.y + 65
+                            width: 80
+                            height: 50 * calcSideLine();
+                            source: "link_side.svg"
+
+                            function calcSideLine() {
+                                var rIdx;
+
+                                rIdx = graphString.lastIndexOf('/');
+                                rIdx = Math.max(rIdx, graphString.lastIndexOf('\\'));
+                                rIdx = Math.max(rIdx, graphString.lastIndexOf('<'));
+                                rIdx = Math.max(rIdx, graphString.lastIndexOf('y'));
+
+                                return Math.max(0, rIdx - indent - 1);
+                            }
+                        }
+
                         Column {
                             y: 15
                             Repeater {
@@ -49,10 +68,12 @@ Rectangle {
                                     width: 80
                                     height: 50
                                     clip: true
+                                    color: "transparent"
 
                                     Image {
+                                        height: parent.height
                                         width: parent.width
-                                        anchors.verticalCenter: parent.verticalCenter
+                                        //anchors.verticalCenter: parent.verticalCenter
                                         Component.onCompleted: {
                                             var fileName = getImage(graphString.charAt(index));
                                             if (!fileName)
@@ -73,9 +94,13 @@ Rectangle {
                                                 return "link_through_merge_under.svg";
                                             if (ch == 'r')
                                                 return "link_through_merge_over.svg";
+                                            if (ch == '<')
+                                                return "link_merge_branch.svg";
+                                            if (ch == '*')
+                                                return "link_through.svg";
 
-                                            console.log('link line:' + ch);
-                                            return null;
+                                            //console.log('link line:' + ch);
+                                            return '';
                                         }
 
                                     }
@@ -98,14 +123,6 @@ Rectangle {
                         id: commitItem
                         text: model.hash
                         y: model.indent * 50
-
-                        Image {
-                            z: -1
-                            anchors.fill: parent
-                            anchors.verticalCenter: parent.verticalCenter
-                            source: "link_through.svg"
-                            visible: index != 0
-                        }
                     }
 
 

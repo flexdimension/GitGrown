@@ -4,7 +4,7 @@ Rectangle {
     id: main
     width: 80
     height: 80
-    border.color: "gray"
+    //border.color: "gray"
     color: "transparent"
     antialiasing: true
 
